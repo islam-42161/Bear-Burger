@@ -46,7 +46,7 @@ public class Login extends JFrame{
                     if (username.equals(checkUser.getUsername()) && password.equals(checkUser.getPass())){
                         System.out.println("Login successful");
                         dispose();
-                        new HomePage(checkUser);
+                        new HomePage(checkUser.getUserId());
                     }
                     else{
                         System.out.println("Username/password credential error");

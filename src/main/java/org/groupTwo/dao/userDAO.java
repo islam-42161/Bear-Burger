@@ -101,10 +101,45 @@ public class userDAO {
         }
         return searchUser;
     }
+    public User searchById(int userId){
+        User searchUser = null;
+        List<User> users;
+        try{
+            users = this.jdbcTemplate.query("select * from users where id = "+userId+";",(resultSet,rowNum)->{
+                User user = new User();
+                user.setUserId(resultSet.getInt("id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setEmail(resultSet.getString("email"));
+                user.setGender(resultSet.getString("gender"));
+                user.setPass(resultSet.getString("pass"));
+                user.setPhone(resultSet.getString("phone"));
+                user.setReg_date(resultSet.getDate("reg_date"));
+                System.out.println("User found with creds: "+user.getUsername()+","+user.getPass());
+                return user;
+            });
+            if(users.size()>0){
+                searchUser = users.get(0);
+            }
+            else{
+                System.out.println("No similar user found");
+            }
+        }
+        catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+        return searchUser;
+    }
     public void deleteUser(int userId) {
         this.jdbcTemplate.update(
                 "delete from users where id = ?",
                 userId);
+    }
+
+    public void updateUser(int userId,String pass,String phone,String gender){
+        this.jdbcTemplate.update(
+                "update users set pass = '"+pass+"',phone = '"+phone+"',gender = '"+gender+"' where id = ?",
+                userId);
+
     }
 
 }
